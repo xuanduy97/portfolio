@@ -23,12 +23,13 @@
   </header>
 
   <div class="skill-groups">
-    {#each skills as group}
-      <div class="group-card">
+    {#each skills as group, i}
+      <div class="group-card" style="--i: {i}">
         <div class="group-header">
           <div class="group-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                 aria-hidden="true" focusable="false">
               {@html icons[group.label] ?? defaultIcon}
             </svg>
           </div>
@@ -46,56 +47,70 @@
 </div>
 
 <style>
+  @keyframes enter {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
   .page {
-    padding: 20px 20px 24px;
+    padding: 28px 24px 32px;
   }
 
   header {
-    margin-bottom: 24px;
+    margin-bottom: 26px;
+    animation: enter 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .group-card {
+    animation: enter 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(55ms + var(--i, 0) * 50ms);
   }
 
   h1 {
-    font-size: 22px;
+    font-size: 25px;
     font-weight: 600;
     color: var(--text);
-    letter-spacing: -0.01em;
+    letter-spacing: 0;
+    line-height: 1.15;
   }
 
   .header-sub {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--text-muted);
-    margin-top: 4px;
+    margin-top: 6px;
   }
 
   .skill-groups {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
   }
 
   .group-card {
     background: var(--bg-secondary);
-    border-radius: var(--radius-md);
-    padding: 14px 16px;
+    border-radius: var(--radius-lg);
+    padding: 18px;
     border: 0.5px solid var(--border);
+    box-shadow: 0 1px 2px rgba(21, 23, 26, 0.04);
   }
 
   .group-header {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
+    gap: 12px;
+    margin-bottom: 14px;
   }
 
   .group-icon {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     border-radius: var(--radius-sm);
     background: var(--accent-bg);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    border: 0.5px solid color-mix(in srgb, var(--accent) 18%, transparent);
   }
 
   .group-icon svg {
@@ -105,29 +120,43 @@
   }
 
   .group-label {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
     color: var(--text);
+    line-height: 1.3;
   }
 
   .pills {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 7px;
   }
 
   .pill {
     font-size: 12px;
-    padding: 4px 12px;
-    border-radius: 20px;
-    background: var(--bg);
+    padding: 6px 9px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-tertiary);
     color: var(--text-secondary);
     border: 0.5px solid var(--border);
-    transition: border-color 0.15s;
+    line-height: 1.2;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   }
 
   .pill:hover {
-    border-color: var(--accent);
+    background: var(--accent-bg);
+    border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
     color: var(--accent);
+  }
+
+  @media (max-width: 360px) {
+    .page {
+      padding-left: 18px;
+      padding-right: 18px;
+    }
+
+    .group-card {
+      padding: 16px;
+    }
   }
 </style>
